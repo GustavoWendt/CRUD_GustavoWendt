@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import messagebox
-from crud import creat_user,read_users,update_user,delet_user
+from crud import create_user,read_users,update_user,delete_user
 
 class CRUDApp:
     def __init__(self,root):
@@ -12,13 +12,13 @@ class CRUDApp:
 
     def create_widgets(self):
         #Labels
-        tk.label(self.root,text="Nome:").grid(row=0,collumn=0)
-        tk.label(self.root,text="telefone:").grid(row=1,collumn=0)
-        tk.label(self.root,text="Email:").grid(row=2,collumn=0)
-        tk.label(self.root,text="usuário:").grid(row=3,collumn=0)
-        tk.label(self.root,text="senha:").grid(row=4,collumn=0)
+        tk.Label(self.root,text="Nome:").grid(row=0,column=0)
+        tk.Label(self.root,text="telefone:").grid(row=1,column=0)
+        tk.Label(self.root,text="Email:").grid(row=2,column=0)
+        tk.Label(self.root,text="usuário:").grid(row=3,column=0)
+        tk.Label(self.root,text="senha:").grid(row=4,column=0)
 
-        tk.label(self.root,text="User ID(for update/delete):").grid(row=5,collumn=0)
+        tk.Label(self.root,text="User ID(for update/delete):").grid(row=5,column=0)
 
 
         # CRIAR AS CAIXAS PARA DIGITAR OS VALORES (OS DADOS).
@@ -39,20 +39,20 @@ class CRUDApp:
         self.user_id_entry.grid(row=5,column=1)
 
         #botões do CRUD
-        tk.Button(self.root,text="Criar Usuario",command=self.creat_user).grid(row=6,column=0,columnspan=1)
-        tk.Button(self.root,text="listar usuario",command=self.creat_user).grid(row=6,column=1,columnspan=1)
-        tk.Button(self.root,text="Alterar usuário",command=self.creat_user).grid(row=7,column=0,columnspan=1)
-        tk.Button(self.root,text="Excluir usuário",command=self.creat_user).grid(row=7,column=1,columnspan=1)
+        tk.Button(self.root,text="Criar Usuario",command=self.create_user).grid(row=6,column=0,columnspan=1)
+        tk.Button(self.root,text="listar usuario",command=self.read_users).grid(row=6,column=1,columnspan=1)
+        tk.Button(self.root,text="Alterar usuário",command=self.update_user).grid(row=7,column=0,columnspan=1)
+        tk.Button(self.root,text="Excluir usuário",command=self.delete_user).grid(row=7,column=1,columnspan=1)
 
-    def creat_user(self):
+    def create_user(self):
         nome = self.nome_entry.get()
         telefone = self.telefone_entry.get()
         email = self.email_entry.get()
         usuario = self.usuario_entry.get()
-        senha = self.senha_entry_entry.get()
+        senha = self.senha_entry.get()
         
         if nome and telefone and email and usuario and senha:
-            creat_user(nome,telefone,email,usuario,senha)
+            create_user(nome,telefone,email,usuario,senha)
             self.nome_entry.delete(0,tk.END)
             self.telefone_entry.delete(0,tk.END)
             self.email_entry.delete(0,tk.END)
@@ -66,4 +66,37 @@ class CRUDApp:
         self.text_area.delete(1.0,tk.END)
         for user in users:
             self.text_area.insert(tk.END,f"ID: {user[0]}, nome:{user[1]},telefone:{user[2]},Email:{user[3]}\n")
-tk.mainloop()
+
+    def update_user(self):
+       user_id = self.user_id_entry.get()
+       nome = self.nome_entry.get()
+       telefone = self.telefone_entry.get()
+       email = self.email_entry.get()
+       usuario = self.usuario_entry.get()
+       senha = self.senha_entry.get()
+
+       if user_id and nome and telefone and email and usuario and senha:
+         update_user(user_id,nome,telefone,email,usuario,senha)
+         self.nome_entry.delete(0,tk.END)
+         self.telefone_entry.delete(0,tk.END)
+         self.email_entry.delete(0,tk.END)
+         self.usuario_entry.delete(0,tk.END)
+         self.senha_entry.delete(0,tk.END)
+         messagebox.showerror("susseso","usuario alterado com sussesso")
+
+       else:
+        messagebox.showerror("erro","todos os campos sao obrigatorios")
+
+    def delete_user(self):
+       user_id = self.user_id_entry.get()
+       if user_id:
+        delete_user(user_id)
+        self.user_id_entry.delete(0,tk.END)
+        messagebox.showerror("Sussesso","ID do usuario excluido com sucesso!")
+       else:
+         messagebox.showerror("Erro","ID do usuario é obrigatorio")
+
+if __name__ == "__main__":
+  root = tk.Tk()
+  app = CRUDApp(root)
+  root.mainloop()
